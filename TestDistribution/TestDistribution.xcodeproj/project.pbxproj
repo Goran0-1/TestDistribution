@@ -14,6 +14,7 @@
 		007FC1932BF245D900C0836B /* TestDistributionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007FC1922BF245D900C0836B /* TestDistributionTests.swift */; };
 		007FC19D2BF245D900C0836B /* TestDistributionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007FC19C2BF245D900C0836B /* TestDistributionUITests.swift */; };
 		007FC19F2BF245D900C0836B /* TestDistributionUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007FC19E2BF245D900C0836B /* TestDistributionUITestsLaunchTests.swift */; };
+		007FC1AC2BF246EA00C0836B /* codemagic.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 007FC1AB2BF246EA00C0836B /* codemagic.yaml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		007FC1982BF245D900C0836B /* TestDistributionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestDistributionUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		007FC19C2BF245D900C0836B /* TestDistributionUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDistributionUITests.swift; sourceTree = "<group>"; };
 		007FC19E2BF245D900C0836B /* TestDistributionUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDistributionUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		007FC1AB2BF246EA00C0836B /* codemagic.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = codemagic.yaml; path = ../codemagic.yaml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 		007FC1752BF245D600C0836B = {
 			isa = PBXGroup;
 			children = (
+				007FC1AB2BF246EA00C0836B /* codemagic.yaml */,
 				007FC1802BF245D600C0836B /* TestDistribution */,
 				007FC1912BF245D900C0836B /* TestDistributionTests */,
 				007FC19B2BF245D900C0836B /* TestDistributionUITests */,
@@ -231,6 +234,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				007FC1AC2BF246EA00C0836B /* codemagic.yaml in Resources */,
 				007FC1892BF245D800C0836B /* Preview Assets.xcassets in Resources */,
 				007FC1862BF245D800C0836B /* Assets.xcassets in Resources */,
 			);
