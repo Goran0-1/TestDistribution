@@ -22,7 +22,7 @@ workflows:
         - name: Build ipa for distribution
           script: | 
             xcode-project build-ipa \
-              --project "TestDistribution.xcodeproj" \
+              --project "TestDistribution/TestDistribution.xcodeproj" \
               --scheme "$XCODE_SCHEME"
       artifacts:
         - build/ios/ipa/*.ipa
