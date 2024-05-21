@@ -12,20 +12,20 @@ workflows:
           distribution_type: app_store # or: ad_hoc | development | enterprise
           bundle_identifier: omega.TestDistribution
           
-ios-native:
-  environment:
-    vars:
-      BUNDLE_ID: "omega.TestDistribution"
-      # XCODE_WORKSPACE: "CodemagicSample.xcworkspace" # <-- Name of your Xcode workspace
-      XCODE_SCHEME: "TestDistribution" # <-- Name of your Xcode scheme
-scripts:
-  - name: Build ipa for distribution
-    script: | 
-      xcode-project build-ipa \
-        --project "TestDistribution.xcodeproj" \
-        --scheme "$XCODE_SCHEME"
-artifacts:
-  - build/ios/ipa/*.ipa
-  - /tmp/xcodebuild_logs/*.log
-  - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
-  - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    ios-native:
+      environment:
+        vars:
+          BUNDLE_ID: "omega.TestDistribution"
+          # XCODE_WORKSPACE: "CodemagicSample.xcworkspace" # <-- Name of your Xcode workspace
+          XCODE_SCHEME: "TestDistribution" # <-- Name of your Xcode scheme
+      scripts:
+        - name: Build ipa for distribution
+          script: | 
+            xcode-project build-ipa \
+              --project "TestDistribution.xcodeproj" \
+              --scheme "$XCODE_SCHEME"
+      artifacts:
+        - build/ios/ipa/*.ipa
+        - /tmp/xcodebuild_logs/*.log
+        - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+        - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
