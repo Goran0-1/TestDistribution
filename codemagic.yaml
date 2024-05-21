@@ -10,7 +10,7 @@ workflows:
       environment:
         ios_signing:
           distribution_type: app_store # or: ad_hoc | development | enterprise
-          bundle_identifier: com.example.id
+          bundle_identifier: omega.TestDistribution
           
 ios-native:
   environment:
