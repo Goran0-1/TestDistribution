@@ -16,13 +16,13 @@ workflows:
       environment:
         vars:
           BUNDLE_ID: "omega.TestDistribution"
-          # XCODE_WORKSPACE: "CodemagicSample.xcworkspace" # <-- Name of your Xcode workspace
+          XCODE_PROJECT: "TestDistribution.xcodeproj" # <-- Name of your Xcode workspace
           XCODE_SCHEME: "TestDistribution" # <-- Name of your Xcode scheme
       scripts:
         - name: Build ipa for distribution
           script: | 
             xcode-project build-ipa \
-              --project "TestDistribution/TestDistribution.xcodeproj" \
+              --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
               --scheme "$XCODE_SCHEME"
       artifacts:
         - build/ios/ipa/*.ipa
