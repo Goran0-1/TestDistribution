@@ -14,6 +14,9 @@ workflows:
           
     ios-native:
       environment:
+        ios_signing:
+          distribution_type: app_store # or: ad_hoc | development | enterprise
+          bundle_identifier: omega.TestDistribution
         vars:
           BUNDLE_ID: "omega.TestDistribution"
           XCODE_PROJECT: "TestDistribution.xcodeproj" # <-- Name of your Xcode workspace
