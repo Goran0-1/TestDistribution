@@ -1,18 +1,6 @@
-workflows:
-    sample-workflow:
-        name: Codemagic Sample Workflow
-        max_build_duration: 120
-        instance_type: mac_mini_m1
-
-    ios-workflow:
-      name: iOS Workflow 
-  
-      environment:
-        ios_signing:
-          distribution_type: app_store # or: ad_hoc | development | enterprise
-          bundle_identifier: omega.TestDistribution
-          
+workflows:          
     ios-native:
+      name: iOS Workflow 
       environment:
         ios_signing:
           distribution_type: ad_hoc # or: ad_hoc | development | enterprise
@@ -22,6 +10,8 @@ workflows:
           XCODE_PROJECT: "TestDistribution.xcodeproj" # <-- Name of your Xcode workspace
           XCODE_SCHEME: "TestDistribution" # <-- Name of your Xcode scheme
       scripts:
+        - name: Set up code signing settings on Xcode project
+          script: xcode-project use-profiles
         - name: Build ipa for distribution
           script: | 
             xcode-project build-ipa \
