@@ -43,7 +43,7 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
       - name: build archive
         run: |
-          xcodebuild -scheme "TestDistribution" \
+          xcodebuild -scheme "TestDistribution" -allowProvisioningUpdates \
           -archivePath $RUNNER_TEMP/testdistribution.archive \
           -sdk iphoneos \
           -configuration Debug \
