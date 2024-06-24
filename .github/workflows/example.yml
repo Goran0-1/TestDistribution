@@ -73,7 +73,7 @@ jobs:
             <key>method</key>
             <string>ad-hoc</string>
             <key>teamID</key>
-            <string>goran.tatomirov@vegait.rs</string>
+            <string>RC7W8BPRW2</string>
             <key>provisioningProfiles</key>
             <dict>
               <key>omega.TestDistribution</key>
