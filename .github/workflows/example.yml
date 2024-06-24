@@ -84,7 +84,7 @@ jobs:
             <key>stripSwiftSymbols</key>
             <true/>
             <key>thinning</key>
-            <string><none></string>
+            <string>none</string>
           </dict>
           </plist>
           EOF
