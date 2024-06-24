@@ -25,6 +25,11 @@ jobs:
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
+          # Debug: Show paths
+          echo "Certificate path: $CERTIFICATE_PATH"
+          echo "Provisioning profile path: $PP_PATH"
+          echo "Keychain path: $KEYCHAIN_PATH"
+
           # Import certificate and provisioning profile from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
@@ -55,7 +60,8 @@ jobs:
       - name: Create ExportOptions.plist
         run: |
           EXPORT_OPTS_PATH=$RUNNER_TEMP/ExportOptions.plist
-          
+
+          # Debug: Show path where ExportOptions.plist will be created
           echo "Creating ExportOptions.plist at $EXPORT_OPTS_PATH"
 
           cat <<EOF > $EXPORT_OPTS_PATH
@@ -63,7 +69,7 @@ jobs:
             "method": "ad-hoc",
             "teamID": "goran.tatomirov@vegait.rs",  
             "provisioningProfiles": {
-              "omega.TestDistribution": "Test Distribution Profile" 
+              "omega.TestDistribution": "Test Distribution Profile"  
             },
             "signingStyle": "manual",
             "stripSwiftSymbols": true,
@@ -71,7 +77,7 @@ jobs:
           }
           EOF
 
-          # Debug: Show the content of ExportOptions.plist and confirm it's created
+          # Debug: Show the content of ExportOptions.plist
           echo "ExportOptions.plist content:"
           cat $EXPORT_OPTS_PATH
 
@@ -84,9 +90,13 @@ jobs:
       - name: Ensure export path exists
         run: |
           EXPORT_PATH=$RUNNER_TEMP/build
+          
+          # Debug: Show where the export path will be created
+          echo "Creating export path at $EXPORT_PATH"
+          
           mkdir -p $EXPORT_PATH
 
-          # Debug: Show the paths
+          # Debug: Show the created export path
           echo "Export path created: $EXPORT_PATH"
           ls -la $EXPORT_PATH
 
