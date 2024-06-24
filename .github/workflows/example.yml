@@ -65,16 +65,27 @@ jobs:
           echo "Creating ExportOptions.plist at $EXPORT_OPTS_PATH"
 
           cat <<EOF > $EXPORT_OPTS_PATH
-          {
-            "method": "ad-hoc",
-            "teamID": "goran.tatomirov@vegait.rs",  
-            "provisioningProfiles": {
-              "omega.TestDistribution": "Test Distribution Profile"
-            },
-            "signingStyle": "manual",
-            "stripSwiftSymbols": true,
-            "thinning": "<none>"
-          }
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>ad-hoc</string>
+            <key>teamID</key>
+            <string>goran.tatomirov@vegait.rs</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>omega.TestDistribution</key>
+              <string>Test Distribution Profile</string>
+            </dict>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>stripSwiftSymbols</key>
+            <true/>
+            <key>thinning</key>
+            <string><none></string>
+          </dict>
+          </plist>
           EOF
 
           # Debug: Show the content of ExportOptions.plist
