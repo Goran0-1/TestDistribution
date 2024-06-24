@@ -59,7 +59,7 @@ jobs:
           cat <<EOF > $EXPORT_OPTS_PATH
           {
             "method": "ad-hoc",
-            "teamID": "goran.tatomirov@vegait.rs",  # Replace with your actual Team ID
+            "teamID": "goran.tatomirov@vegait.rs", 
             "provisioningProfiles": {
               "omega.TestDistribution": "Test Distribution Profile" 
             },
@@ -78,8 +78,36 @@ jobs:
           EXPORT_PATH=$RUNNER_TEMP/build
           mkdir -p $EXPORT_PATH
 
+          # Debug: Show the paths
+          echo "Export path: $EXPORT_PATH"
+          echo "ExportOptions.plist path: $EXPORT_OPTS_PATH"
+
       - name: Export IPA
         run: |
+          # Debugging: Print paths to confirm they are correct
+          echo "Archive path: $RUNNER_TEMP/testdistribution.xcarchive"
+          echo "Export options path: $EXPORT_OPTS_PATH"
+          echo "Export path: $EXPORT_PATH"
+          
+          # Ensure the archive exists
+          if [ ! -d "$RUNNER_TEMP/testdistribution.xcarchive" ]; then
+            echo "Error: Archive path does not exist."
+            exit 1
+          fi
+
+          # Ensure the export options plist exists
+          if [ ! -f "$EXPORT_OPTS_PATH" ]; then
+            echo "Error: ExportOptions.plist file does not exist."
+            exit 1
+          fi
+
+          # Ensure the export directory exists
+          if [ ! -d "$EXPORT_PATH" ]; then
+            echo "Error: Export path does not exist."
+            exit 1
+          fi
+
+          # Export the IPA
           xcodebuild -exportArchive -archivePath $RUNNER_TEMP/testdistribution.xcarchive -exportOptionsPlist $EXPORT_OPTS_PATH -exportPath $EXPORT_PATH
 
       - name: Upload application
