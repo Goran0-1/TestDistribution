@@ -64,6 +64,7 @@ jobs:
           # Debug: Show path where ExportOptions.plist will be created
           echo "Creating ExportOptions.plist at $EXPORT_OPTS_PATH"
 
+          # Create a valid XML plist file
           cat <<EOF > $EXPORT_OPTS_PATH
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
