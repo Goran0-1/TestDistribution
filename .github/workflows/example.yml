@@ -58,9 +58,9 @@ jobs:
           clean archive
 
       - name: Create ExportOptions.plist
+        env:
+          EXPORT_OPTS_PATH: ${{ runner.temp }}/ExportOptions.plist
         run: |
-          EXPORT_OPTS_PATH=$RUNNER_TEMP/ExportOptions.plist
-
           # Debug: Show path where ExportOptions.plist will be created
           echo "Creating ExportOptions.plist at $EXPORT_OPTS_PATH"
 
@@ -69,7 +69,7 @@ jobs:
             "method": "ad-hoc",
             "teamID": "goran.tatomirov@vegait.rs",  
             "provisioningProfiles": {
-              "omega.TestDistribution": "Test Distribution Profile"  
+              "omega.TestDistribution": "Test Distribution Profile"
             },
             "signingStyle": "manual",
             "stripSwiftSymbols": true,
@@ -88,9 +88,9 @@ jobs:
           fi
 
       - name: Ensure export path exists
+        env:
+          EXPORT_PATH: ${{ runner.temp }}/build
         run: |
-          EXPORT_PATH=$RUNNER_TEMP/build
-          
           # Debug: Show where the export path will be created
           echo "Creating export path at $EXPORT_PATH"
           
@@ -101,6 +101,9 @@ jobs:
           ls -la $EXPORT_PATH
 
       - name: Export IPA
+        env:
+          EXPORT_OPTS_PATH: ${{ runner.temp }}/ExportOptions.plist
+          EXPORT_PATH: ${{ runner.temp }}/build
         run: |
           # Debugging: Print paths to confirm they are correct
           echo "Archive path: $RUNNER_TEMP/testdistribution.xcarchive"
@@ -132,5 +135,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app
-          path: $RUNNER_TEMP/build/I\ am\ Groot.ipa
+          path: ${{ runner.temp }}/build/I\ am\ Groot.ipa
           retention-days: 3
