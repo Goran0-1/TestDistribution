@@ -91,6 +91,9 @@ jobs:
           echo "ExportOptions.plist content:"
           cat $EXPORT_OPTS_PATH
 
+          # Validate the plist file structure
+          plutil -lint $EXPORT_OPTS_PATH
+
           # Confirm the file exists
           if [ ! -f "$EXPORT_OPTS_PATH" ]; then
             echo "Error: ExportOptions.plist was not created successfully."
@@ -138,12 +141,20 @@ jobs:
             exit 1
           fi
 
+          # Validate the plist again before export
+          echo "Validating ExportOptions.plist with plutil..."
+          plutil -lint $EXPORT_OPTS_PATH
+
           # Export the IPA
           xcodebuild -exportArchive -archivePath $RUNNER_TEMP/testdistribution.xcarchive -exportOptionsPlist $EXPORT_OPTS_PATH -exportPath $EXPORT_PATH
+
+          # Debug: Show contents of the export directory
+          echo "Contents of the export path:"
+          ls -la $EXPORT_PATH
 
       - name: Upload application
         uses: actions/upload-artifact@v3
         with:
           name: app
-          path: ${{ runner.temp }}/build/I\ am\ Groot.ipa
+          path: ${{ runner.temp }}/build/*.ipa
           retention-days: 3
