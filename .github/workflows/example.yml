@@ -174,7 +174,7 @@ jobs:
         run: ls -la
 
       - name: Upload artifact to Firebase App Distribution
-      - uses: nickwph/firebase-app-distribution-action@v1.2.1
+        uses: nickwph/firebase-app-distribution-action@v1.2.1
         with:
           file: TestDistribution.ipa
           app: ${{ secrets.FIREBASE_IOS_APP_ID }}
