@@ -155,7 +155,7 @@ jobs:
       - name: Upload application
         uses: actions/upload-artifact@v4
         with:
-          name: app
+          name: app.ipa
           path: ${{ runner.temp }}/build/*.ipa
           retention-days: 3
 
@@ -164,9 +164,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
         with:
+          path: ${{ runner.temp }}/build/*.ipa
           name: app.ipa
 
       - name: Upload artifact to Firebase App Distribution
@@ -175,4 +176,5 @@ jobs:
           appId: ${{secrets.FIREBASE_IOS_APP_ID}}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: testers
+          path: ${{ runner.temp }}/build/*.ipa
           file: app.ipa
