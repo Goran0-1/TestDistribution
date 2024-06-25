@@ -159,10 +159,20 @@ jobs:
           path: ${{ runner.temp }}/build/*.ipa
           retention-days: 3
 
-      - name: upload artifact to Firebase App Distribution
+  distribute-ios:
+    needs: build_with_signing 
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: app.ipa
+
+      - name: Upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          appId: ${{secrets.FIREBASE_APP_ID}}
+          appId: ${{secrets.FIREBASE_IOS_APP_ID}}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: testers
           file: app.ipa
