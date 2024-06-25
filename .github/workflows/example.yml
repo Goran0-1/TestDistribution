@@ -178,5 +178,9 @@ jobs:
         with:
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
-          file: 'TestDistribution.ipa' 
-          groups: 'testers,qa'  
+          file: TestDistribution.ipa 
+          groups: 'testers'  
+
+      - name: Check if Firebase upload step succeeded
+        if: failure()
+        run: echo "Failed to upload to Firebase"
