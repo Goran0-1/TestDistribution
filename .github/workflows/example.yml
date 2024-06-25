@@ -176,6 +176,6 @@ jobs:
       - name: Upload artifact to Firebase App Distribution
         uses: nickwph/firebase-app-distribution-action@v1
         with:
-          file: app.ipa
+          file: ${{ runner.temp }}/build/*.ipa
           app: ${{ secrets.FIREBASE_APP_ID }}
           credentials: ${{ secrets.CREDENTIAL_FILE_CONTENT }} 
