@@ -174,11 +174,10 @@ jobs:
         run: ls -la
 
       - name: Upload artifact to Firebase App Distribution
-        uses: nickwph/firebase-app-distribution-action@v1.2.1
+        uses: mastersam07/firebase-app-distribution-action@v0.1
         with:
-          file: TestDistribution.ipa
-          app: ${{ secrets.FIREBASE_IOS_APP_ID }}
-          credentials: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-          groups: testers
-          debug: true  # Optional: Enable debug to get more detailed logs  
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
+          file: TestDistribution.ipa 
+          groups: 'testers' 
      
