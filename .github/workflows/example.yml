@@ -179,8 +179,10 @@ jobs:
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
           file: TestDistribution.ipa 
-          groups: 'testers'  
-
-      - name: Check if Firebase upload step succeeded
+          groups: 'testers'
+          
+      - name: Capture Firebase upload logs
         if: failure()
-        run: echo "Failed to upload to Firebase"
+        run: |
+          echo "Failed to upload to Firebase"
+          # Add additional commands here to capture logs if needed  
