@@ -178,5 +178,5 @@ jobs:
         with:
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
-          file: '/home/runner/work/_temp/build/*.ipa' 
+          file: 'TestDistribution.ipa' 
           groups: 'testers,qa'  
