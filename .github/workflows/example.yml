@@ -174,8 +174,9 @@ jobs:
         run: ls -la
 
       - name: Upload artifact to Firebase App Distribution
-        uses: nickwph/firebase-app-distribution-action@v1
+        uses: mastersam07/firebase-app-distribution-action@v0.1
         with:
-          file: ${{ runner.temp }}/build/*.ipa
-          app: ${{ secrets.FIREBASE_APP_ID }}
-          credentials: ${{ secrets.CREDENTIAL_FILE_CONTENT }} 
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
+          file: '/home/runner/work/_temp/build/*.ipa' 
+          groups: 'testers,qa'  
