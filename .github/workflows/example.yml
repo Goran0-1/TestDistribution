@@ -173,11 +173,11 @@ jobs:
       - name: List files in the workspace
         run: ls -la
 
-      - name: Upload artifact to Firebase App Distribution
-        uses: mastersam07/firebase-app-distribution-action@v0.1
+      - name: Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
         with:
-          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
-          file: TestDistribution.ipa 
-          groups: 'testers' 
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          groups: testers
+          file: TestDistribution.ipa
      
