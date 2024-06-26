@@ -151,7 +151,7 @@ jobs:
       - name: Firebase App Distribution for Production
         uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
         with:
-          appId: 1:226881656003:ios:53a8c3b60777065a6c7e76
+          appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: testers
           file: TestDistribution.ipa
