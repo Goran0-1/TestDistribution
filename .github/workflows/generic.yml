@@ -3,7 +3,7 @@ name: App build and distribute
 on: 
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [dev]
 
 jobs:
   build_with_signing:
