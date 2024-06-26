@@ -39,8 +39,6 @@
 /* Begin PBXFileReference section */
 		0003F7FD2C088F6700059765 /* GoogleService-Info-prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-prod.plist"; sourceTree = "<group>"; };
 		001A506D2C2C3AD300AFEDB6 /* GoogleService-Info-dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-dev.plist"; sourceTree = "<group>"; };
-		001A50702C2C3B1B00AFEDB6 /* Test_Distribution_Dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Test_Distribution_Dev.xcconfig; path = ../../../../Documents/Test_Distribution_Dev.xcconfig; sourceTree = "<group>"; };
-		001A50712C2C3B2B00AFEDB6 /* Test_Distribution_Prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Test_Distribution_Prod.xcconfig; sourceTree = "<group>"; };
 		007D4BF62C0F50C400433550 /* codemagic.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = codemagic.yaml; sourceTree = "<group>"; };
 		007FC17E2BF245D600C0836B /* TestDistribution.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestDistribution.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		007FC1812BF245D600C0836B /* TestDistributionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDistributionApp.swift; sourceTree = "<group>"; };
@@ -88,15 +86,6 @@
 			path = Firebase;
 			sourceTree = "<group>";
 		};
-		001A506F2C2C3B0000AFEDB6 /* Config */ = {
-			isa = PBXGroup;
-			children = (
-				001A50702C2C3B1B00AFEDB6 /* Test_Distribution_Dev.xcconfig */,
-				001A50712C2C3B2B00AFEDB6 /* Test_Distribution_Prod.xcconfig */,
-			);
-			path = Config;
-			sourceTree = "<group>";
-		};
 		007FC1752BF245D600C0836B = {
 			isa = PBXGroup;
 			children = (
@@ -121,7 +110,6 @@
 		007FC1802BF245D600C0836B /* TestDistribution */ = {
 			isa = PBXGroup;
 			children = (
-				001A506F2C2C3B0000AFEDB6 /* Config */,
 				001A506C2C2C3A7F00AFEDB6 /* Firebase */,
 				007FC1812BF245D600C0836B /* TestDistributionApp.swift */,
 				007FC1852BF245D800C0836B /* Assets.xcassets */,
@@ -333,7 +321,6 @@
 /* Begin XCBuildConfiguration section */
 		007FC1A02BF245D900C0836B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 001A50702C2C3B1B00AFEDB6 /* Test_Distribution_Dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -397,7 +384,6 @@
 		};
 		007FC1A12BF245D900C0836B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 001A50712C2C3B2B00AFEDB6 /* Test_Distribution_Prod.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
