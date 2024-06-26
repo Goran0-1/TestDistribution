@@ -256,7 +256,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          name: dev-app.ipa
+          name: TestDistribution.ipa
           path: ./
 
       - name: List files in the workspace for development
@@ -268,4 +268,4 @@ jobs:
           appId: 1:226881656003:ios:f2d3003bab23911a6c7e76
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: dev-testers
-          file: dev-app.ipa
+          file: TestDistribution.ipa
