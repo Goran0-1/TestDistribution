@@ -153,5 +153,5 @@ jobs:
         with:
           appId: 1:226881656003:ios:f2d3003bab23911a6c7e76
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-          groups: dev-testers
+          groups: testers
           file: TestDistribution.ipa
