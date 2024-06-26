@@ -1,9 +1,9 @@
-name: Test
+name: App Build and Distribute (Development)
 
 on: 
   workflow_dispatch:
   push:
-    branches: [dev]
+    branches: [main]
 
 jobs:
   build_with_signing:
@@ -20,51 +20,43 @@ jobs:
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
-          # Create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
-          # Debug: Show paths
           echo "Certificate path: $CERTIFICATE_PATH"
           echo "Provisioning profile path: $PP_PATH"
           echo "Keychain path: $KEYCHAIN_PATH"
 
-          # Import certificate and provisioning profile from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
 
-          # Create temporary keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
 
-          # Import certificate to keychain
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-          # Apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-      - name: Build archive
+      - name: Build Development Archive
         run: |
           xcodebuild -scheme "TestDistribution" -allowProvisioningUpdates \
-          -archivePath $RUNNER_TEMP/testdistribution.xcarchive \
+          -archivePath $RUNNER_TEMP/dev.xcarchive \
           -sdk iphoneos \
-          -configuration Release \
+          -configuration Debug \
           -destination generic/platform=iOS \
           clean archive
 
-      - name: Create ExportOptions.plist
+      - name: Create ExportOptions.plist for Development
         env:
-          EXPORT_OPTS_PATH: ${{ runner.temp }}/ExportOptions.plist
+          EXPORT_OPTS_PATH: ${{ runner.temp }}/DevExportOptions.plist
         run: |
-          # Debug: Show path where ExportOptions.plist will be created
-          echo "Creating ExportOptions.plist at $EXPORT_OPTS_PATH"
+          echo "Creating ExportOptions.plist for development at $EXPORT_OPTS_PATH"
 
-          # Create a valid XML plist file
           cat <<EOF > $EXPORT_OPTS_PATH
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -76,8 +68,8 @@ jobs:
             <string>RC7W8BPRW2</string>
             <key>provisioningProfiles</key>
             <dict>
-              <key>omega.TestDistribution</key>
-              <string>Test Distribution Profile</string>
+              <key>omega.TestDistribution.development</key>
+              <string>Test Distribution Profile Dev</string>
             </dict>
             <key>signingStyle</key>
             <string>manual</string>
@@ -87,79 +79,62 @@ jobs:
           </plist>
           EOF
 
-          # Debug: Show the content of ExportOptions.plist
-          echo "ExportOptions.plist content:"
+          echo "Dev ExportOptions.plist content:"
           cat $EXPORT_OPTS_PATH
 
-          # Validate the plist file structure
           plutil -lint $EXPORT_OPTS_PATH
 
-          # Confirm the file exists
           if [ ! -f "$EXPORT_OPTS_PATH" ]; then
-            echo "Error: ExportOptions.plist was not created successfully."
+            echo "Error: Dev ExportOptions.plist was not created successfully."
             exit 1
           fi
 
-      - name: Ensure export path exists
+      - name: Ensure export path exists for Development
         env:
-          EXPORT_PATH: ${{ runner.temp }}/build
+          EXPORT_PATH: ${{ runner.temp }}/build/dev
         run: |
-          # Debug: Show where the export path will be created
-          echo "Creating export path at $EXPORT_PATH"
-          
+          echo "Creating export path for development at $EXPORT_PATH"
           mkdir -p $EXPORT_PATH
-
-          # Debug: Show the created export path
-          echo "Export path created: $EXPORT_PATH"
+          echo "Export path for development created: $EXPORT_PATH"
           ls -la $EXPORT_PATH
 
-      - name: Export IPA
+      - name: Export Development IPA
         env:
-          EXPORT_OPTS_PATH: ${{ runner.temp }}/ExportOptions.plist
-          EXPORT_PATH: ${{ runner.temp }}/build
+          EXPORT_OPTS_PATH: ${{ runner.temp }}/DevExportOptions.plist
+          EXPORT_PATH: ${{ runner.temp }}/build/dev
         run: |
-          # Debugging: Print paths to confirm they are correct
-          echo "Archive path: $RUNNER_TEMP/testdistribution.xcarchive"
-          echo "Export options path: $EXPORT_OPTS_PATH"
-          echo "Export path: $EXPORT_PATH"
+          echo "Exporting Development IPA"
 
-          # Ensure the archive exists
-          if [ ! -d "$RUNNER_TEMP/testdistribution.xcarchive" ]; then
-            echo "Error: Archive path does not exist."
+          if [ ! -d "$RUNNER_TEMP/dev.xcarchive" ]; then
+            echo "Error: Development archive path does not exist."
             exit 1
           fi
 
-          # Ensure the export options plist exists
           if [ ! -f "$EXPORT_OPTS_PATH" ]; then
-            echo "Error: ExportOptions.plist file does not exist."
+            echo "Error: Dev ExportOptions.plist file does not exist."
             exit 1
           fi
 
-          # Ensure the export directory exists
           if [ ! -d "$EXPORT_PATH" ]; then
-            echo "Error: Export path does not exist."
+            echo "Error: Export path for development does not exist."
             exit 1
           fi
 
-          # Validate the plist again before export
-          echo "Validating ExportOptions.plist with plutil..."
           plutil -lint $EXPORT_OPTS_PATH
 
-          # Export the IPA
-          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/testdistribution.xcarchive -exportOptionsPlist $EXPORT_OPTS_PATH -exportPath $EXPORT_PATH
+          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/dev.xcarchive -exportOptionsPlist $EXPORT_OPTS_PATH -exportPath $EXPORT_PATH
 
-          # Debug: Show contents of the export directory
-          echo "Contents of the export path:"
+          echo "Contents of the development export path:"
           ls -la $EXPORT_PATH
 
-      - name: Upload application
+      - name: Upload development application
         uses: actions/upload-artifact@v4
         with:
-          name: app.ipa
-          path: ${{ runner.temp }}/build/*.ipa
+          name: dev-app.ipa
+          path: ${{ runner.temp }}/build/dev/*.ipa
           retention-days: 3
 
-  distribute-ios:
+  distribute-ios-dev:
     needs: build_with_signing 
     runs-on: ubuntu-latest
 
@@ -167,17 +142,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          name: app.ipa
+          name: dev-app.ipa
           path: ./
 
-      - name: List files in the workspace
+      - name: List files in the workspace for development
         run: ls -la
 
-      - name: Firebase App Distribution
+      - name: Firebase App Distribution for Development
         uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
         with:
-          appId: ${{ secrets.FIREBASE_APP_ID }}
+          appId: 1:226881656003:ios:f2d3003bab23911a6c7e76
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-          groups: testers
+          groups: dev-testers
           file: TestDistribution.ipa
-     
