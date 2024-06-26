@@ -1,4 +1,4 @@
-name: App Build and Distribute
+name: App Build and Distribute (Production)
 
 on: 
   workflow_dispatch:
@@ -51,15 +51,6 @@ jobs:
           -destination generic/platform=iOS \
           clean archive
 
-      - name: Build Development Archive
-        run: |
-          xcodebuild -scheme "TestDistribution" -allowProvisioningUpdates \
-          -archivePath $RUNNER_TEMP/dev.xcarchive \
-          -sdk iphoneos \
-          -configuration Debug \
-          -destination generic/platform=iOS \
-          clean archive
-
       - name: Create ExportOptions.plist for Production
         env:
           EXPORT_OPTS_PATH: ${{ runner.temp }}/ProdExportOptions.plist
@@ -98,44 +89,6 @@ jobs:
             exit 1
           fi
 
-      - name: Create ExportOptions.plist for Development
-        env:
-          EXPORT_OPTS_PATH: ${{ runner.temp }}/DevExportOptions.plist
-        run: |
-          echo "Creating ExportOptions.plist for development at $EXPORT_OPTS_PATH"
-
-          cat <<EOF > $EXPORT_OPTS_PATH
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>method</key>
-            <string>ad-hoc</string>
-            <key>teamID</key>
-            <string>RC7W8BPRW2</string>
-            <key>provisioningProfiles</key>
-            <dict>
-              <key>omega.TestDistribution.development</key>
-              <string>Test Distribution Profile Dev</string>
-            </dict>
-            <key>signingStyle</key>
-            <string>manual</string>
-            <key>stripSwiftSymbols</key>
-            <true/>
-          </dict>
-          </plist>
-          EOF
-
-          echo "Dev ExportOptions.plist content:"
-          cat $EXPORT_OPTS_PATH
-
-          plutil -lint $EXPORT_OPTS_PATH
-
-          if [ ! -f "$EXPORT_OPTS_PATH" ]; then
-            echo "Error: Dev ExportOptions.plist was not created successfully."
-            exit 1
-          fi
-
       - name: Ensure export path exists for Production
         env:
           EXPORT_PATH: ${{ runner.temp }}/build/prod
@@ -143,15 +96,6 @@ jobs:
           echo "Creating export path for production at $EXPORT_PATH"
           mkdir -p $EXPORT_PATH
           echo "Export path for production created: $EXPORT_PATH"
-          ls -la $EXPORT_PATH
-
-      - name: Ensure export path exists for Development
-        env:
-          EXPORT_PATH: ${{ runner.temp }}/build/dev
-        run: |
-          echo "Creating export path for development at $EXPORT_PATH"
-          mkdir -p $EXPORT_PATH
-          echo "Export path for development created: $EXPORT_PATH"
           ls -la $EXPORT_PATH
 
       - name: Export Production IPA
@@ -183,47 +127,11 @@ jobs:
           echo "Contents of the production export path:"
           ls -la $EXPORT_PATH
 
-      - name: Export Development IPA
-        env:
-          EXPORT_OPTS_PATH: ${{ runner.temp }}/DevExportOptions.plist
-          EXPORT_PATH: ${{ runner.temp }}/build/dev
-        run: |
-          echo "Exporting Development IPA"
-
-          if [ ! -d "$RUNNER_TEMP/dev.xcarchive" ]; then
-            echo "Error: Development archive path does not exist."
-            exit 1
-          fi
-
-          if [ ! -f "$EXPORT_OPTS_PATH" ]; then
-            echo "Error: Dev ExportOptions.plist file does not exist."
-            exit 1
-          fi
-
-          if [ ! -d "$EXPORT_PATH" ]; then
-            echo "Error: Export path for development does not exist."
-            exit 1
-          fi
-
-          plutil -lint $EXPORT_OPTS_PATH
-
-          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/dev.xcarchive -exportOptionsPlist $EXPORT_OPTS_PATH -exportPath $EXPORT_PATH
-
-          echo "Contents of the development export path:"
-          ls -la $EXPORT_PATH
-
       - name: Upload production application
         uses: actions/upload-artifact@v4
         with:
           name: prod-app.ipa
           path: ${{ runner.temp }}/build/prod/*.ipa
-          retention-days: 3
-
-      - name: Upload development application
-        uses: actions/upload-artifact@v4
-        with:
-          name: dev-app.ipa
-          path: ${{ runner.temp }}/build/dev/*.ipa
           retention-days: 3
 
   distribute-ios-prod:
@@ -245,27 +153,5 @@ jobs:
         with:
           appId: 1:226881656003:ios:53a8c3b60777065a6c7e76
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-          groups: prod-testers
-          file: prod-app.ipa
-
-  distribute-ios-dev:
-    needs: build_with_signing 
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: TestDistribution.ipa
-          path: ./
-
-      - name: List files in the workspace for development
-        run: ls -la
-
-      - name: Firebase App Distribution for Development
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
-        with:
-          appId: 1:226881656003:ios:f2d3003bab23911a6c7e76
-          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-          groups: dev-testers
+          groups: testers
           file: TestDistribution.ipa
