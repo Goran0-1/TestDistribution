@@ -1,4 +1,4 @@
-name: App build and distribute
+name: Test
 
 on: 
   workflow_dispatch:
